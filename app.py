@@ -1,7 +1,5 @@
 import requests
 from packages.GUI import *
-# from tkinter import ttk
-# from tkinter import *
 
 def updateTable(courses):
 	# delete old item
@@ -9,13 +7,27 @@ def updateTable(courses):
 		treeview.delete(row)
     # insert new item
 	for index, course in enumerate(courses):
+		# API 處理時應該將沒有 location, time, teacher 的欄位自動填入空字串，保持全部資料統一格式
+		if course.get('location') == None: 
+			course['location'] = ''
+		if course.get('time') == None:
+			course['time'] = ''
+		if course.get('teacher') == None:
+			course['teacher'] = ''
 		treeview.insert("", index, values=[course[i] for i in columns])
+
+def selectTea(*args):
+	tea = comboxlist_teacher.get()
+	ans = [s for s in all_teacher if tea in str(s)]
+	comboxlist_teacher['values']=[i for i in ans]
+	if len(ans) > 0:
+		courses = requests.get('https://api.ncnusa.ml/api/teacher/' + tea).json()
+		updateTable(courses)
 
 def selectDep(*args):
 	dep = comboxlist_department.get()
 	courses = requests.get('https://api.ncnusa.ml/api/department/' + dep).json()
 	updateTable(courses)
-	
 
 def selectFac(*args):
 	fac = comboxlist_faculty.get()
@@ -23,11 +35,16 @@ def selectFac(*args):
 	# init department combox
 	comboxlist_department['values']=[i for i in depList]
 	comboxlist_department.current(0)  #defalut option
+	courses = requests.get('https://api.ncnusa.ml/api/faculty/' + fac).json()
+	updateTable(courses)
 
 comboxlist_faculty.bind("<<ComboboxSelected>>", selectFac) # bind function
 comboxlist_department.bind("<<ComboboxSelected>>", selectDep) # bind function
 
+comboxlist_teacher.bind("<<ComboboxSelected>>", selectTea) # bind function
+comboxlist_teacher.bind("<KeyRelease>", selectTea) # dynamic binding
 # default value
+all_teacher = requests.get('https://api.ncnusa.ml/api/teacherList/all').json()
 r = requests.get('https://api.ncnusa.ml/api/10')
 courses = r.json()
 # GUI.init()
