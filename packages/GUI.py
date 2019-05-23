@@ -22,6 +22,11 @@ comvalue_teacher=StringVar()
 comboxlist_teacher=ttk.Combobox(frame, textvariable=comvalue_teacher)
 comboxlist_teacher['values']=()
 comboxlist_teacher.grid(row=1, column=1)
+Label(frame, text='課程名稱: ').grid(row=1, column=2)
+comvalue_name=StringVar()
+comboxlist_name=ttk.Combobox(frame, textvariable=comvalue_name)
+comboxlist_name['values']=()
+comboxlist_name.grid(row=1, column=3)
 ################################################################################
 columns = ('course_cname', 'course_id', 'faculty', 'division', 'course_credit', 'time', 'location', 'teacher')
 table_header = ['課程名稱', '課號', '開課單位', '年級', '學分', '時段', '開課地點', '教師名稱']

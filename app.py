@@ -16,6 +16,16 @@ def updateTable(courses):
 			course['teacher'] = ''
 		treeview.insert("", index, values=[course[i] for i in columns])
 
+def selectName(*args):
+	name = comboxlist_name.get()
+	ans = [s for s in all_course_name if name.lower() in str(s).lower()]
+	comboxlist_name['values']=[i for i in ans]
+	if len(ans) > 0:
+		courses = requests.get('https://api.ncnusa.ml/api/course/' + name).json()
+		# remove duplicate dict in list
+		courses = [dict(t) for t in {tuple(d.items()) for d in courses}]
+		updateTable(courses)
+
 def selectTea(*args):
 	tea = comboxlist_teacher.get()
 	ans = [s for s in all_teacher if tea in str(s)]
@@ -43,8 +53,12 @@ comboxlist_department.bind("<<ComboboxSelected>>", selectDep) # bind function
 
 comboxlist_teacher.bind("<<ComboboxSelected>>", selectTea) # bind function
 comboxlist_teacher.bind("<KeyRelease>", selectTea) # dynamic binding
+
+comboxlist_name.bind("<<ComboboxSelected>>", selectName) # bind function
+comboxlist_name.bind("<KeyRelease>", selectName) # dynamic binding
 # default value
 all_teacher = requests.get('https://api.ncnusa.ml/api/teacherList/all').json()
+all_course_name = requests.get('https://api.ncnusa.ml/api/courseList/all').json()
 r = requests.get('https://api.ncnusa.ml/api/10')
 courses = r.json()
 # GUI.init()
