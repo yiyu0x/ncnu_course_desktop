@@ -18,6 +18,8 @@ def updateTable(courses):
 
 def selectName(*args):
 	name = comboxlist_name.get()
+	if name == '':
+		return
 	ans = [s for s in all_course_name if name.lower() in str(s).lower()]
 	comboxlist_name['values']=[i for i in ans]
 	if len(ans) > 0:
@@ -28,6 +30,8 @@ def selectName(*args):
 
 def selectTea(*args):
 	tea = comboxlist_teacher.get()
+	if tea == '':
+		return
 	ans = [s for s in all_teacher if tea in str(s)]
 	comboxlist_teacher['values']=[i for i in ans]
 	if len(ans) > 0:
@@ -53,13 +57,14 @@ comboxlist_department.bind("<<ComboboxSelected>>", selectDep) # bind function
 
 comboxlist_teacher.bind("<<ComboboxSelected>>", selectTea) # bind function
 comboxlist_teacher.bind("<KeyRelease>", selectTea) # dynamic binding
-
 comboxlist_name.bind("<<ComboboxSelected>>", selectName) # bind function
 comboxlist_name.bind("<KeyRelease>", selectName) # dynamic binding
+
+
 # default value
 all_teacher = requests.get('https://api.ncnusa.ml/api/teacherList/all').json()
 all_course_name = requests.get('https://api.ncnusa.ml/api/courseList/all').json()
-r = requests.get('https://api.ncnusa.ml/api/10')
+r = requests.get('https://api.ncnusa.ml/api/20')
 courses = r.json()
 # GUI.init()
 updateTable(courses)
