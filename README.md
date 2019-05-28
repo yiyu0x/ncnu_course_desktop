@@ -1,5 +1,7 @@
 # ncnu_course_desktop
 
+![](https://i.imgur.com/NmFqJIJ.png)
+
 ## Usage
 
 下載此專案
@@ -19,5 +21,7 @@
 ## features
 
 1. 自動補全建議 (搜尋欄位輸入方向鍵`下`)
+
+![](https://i.imgur.com/NmFqJIJ.png)
 
 2. 第一列與第二列為獨立區塊，沒有互相篩選作用
